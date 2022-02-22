@@ -1,0 +1,65 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public static TreeNode build(int[] pre, int psi, int pei, int[] post, int posi, int poei) {
+		
+		//if we hit a null node, can use posi and poei also 
+		if (psi > pei) {
+			return null;
+		}
+		
+		//if single root node only, can use posi and poei also and post[poei]
+		if (psi == pei) {
+			return new TreeNode(pre[psi]);
+		}
+		
+		//last element of postrder or 1st element of preorder will be always root 
+		//for each tree and subtree
+		//preorder approach -  root  left  right
+		//postorder approach -  left  right root
+		TreeNode root = new TreeNode(post[poei]);
+		
+		//taking last 2nd of post as right subtree root
+		//instead -> we can also take pre[psi+1] as left subtree root
+		int right_sub_root =  post[poei-1];
+		
+		int j = psi+1;
+		int count = 0;
+		
+		//searching for right subtree root in preorder for count
+		//instead -> we can also search for left subtree root in postorder
+		//if above instead is followed
+		while (pre[j] != right_sub_root) {
+			j++;
+			count++;
+		}
+		
+		//calling left part of tree using preorder count
+		//can also use postorder count
+		root.left = build(pre, psi+1, psi+count, post, posi, posi+count-1);
+		//calling right part of tree using preorder count
+		//can also use postorder count
+		root.right = build(pre, psi+count+1, pei, post, posi+count, poei-1);
+		
+		return root;
+	}
+	
+	public static TreeNode constructFromPrePost(int[] pre, int[] post) {
+		
+		return build(pre, 0, pre.length-1, post, 0, post.length-1);
+		
+	}
+}
