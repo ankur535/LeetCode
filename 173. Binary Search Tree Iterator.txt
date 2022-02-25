@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+/**
+	 * This is okay but use O(n) space and can be asked to not use it
+	 * So let's try stack approach
+	 */
+	public class BSTIterator {
+		
+	    ArrayList<Integer> ans;
+		int i = -1;
+
+		public void inOrderTravel(TreeNode root, ArrayList<Integer> ans) {
+			//simple inorder traversal
+			if (root == null) {
+				return;
+			}
+
+			inOrderTravel(root.left, ans);
+			ans.add(root.val);
+			inOrderTravel(root.right, ans);
+		}
+		
+		public BSTIterator(TreeNode root) {
+			ans = new ArrayList<>();
+			//making inorder - sorted arrayList
+			inOrderTravel(root, ans);
+		}
+
+		public int next() {
+			//returning next element
+			i++;
+			return ans.get(i);
+		}
+
+		public boolean hasNext() {
+			//if i+1 is within arraylist
+			return (i + 1 < ans.size());
+		}
+	}
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * int param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */
