@@ -1,0 +1,37 @@
+class Solution {
+    public boolean canArrange(int[] arr, int k) {
+        //remainder frequency array
+		int fre[] = new int[k];
+		
+		//iterate over the array and store the remainers with frequency
+		for (int val : arr) {
+			int rem = val % k;
+
+			if (rem < 0) {
+				rem += k;
+			}
+			
+			//increase frequency at the rem index
+			fre[rem]++;
+		}
+
+		//iterate over frequency array
+		for (int rem = 0; rem <= k/2; rem++) {
+
+			if (rem == 0) {
+				// if freq at rem 0 is not even
+				if (fre[rem] % 2 != 0) {
+					return false;
+				}
+			} else {
+				//if freq -> rem and freq -> k - rem not equal
+				//means cannot form pair for 1 element
+				if (fre[rem] != fre[k - rem]) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+    }
+}

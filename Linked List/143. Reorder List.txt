@@ -1,0 +1,78 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        
+        //getting mid
+        ListNode mid = midNode(head);
+        //saving next of mid and pointing next of mid to null
+        ListNode nextToMid = mid.next;
+        mid.next = null;
+        //reverse the list after mid
+        ListNode reverseHead = reverse(nextToMid);
+        //merge two list: head to mid and mid.next to tail
+        merge(head, reverseHead);
+    }
+    
+    public void merge(ListNode head, ListNode reverseHead) {
+        //taking head of both list
+        ListNode temp = head;
+        ListNode itr = reverseHead;
+        
+        while (itr != null) {
+            
+            //saving next of both list nodes
+            ListNode tempNext = temp.next;
+            ListNode itrNext = itr.next;
+            
+            //list 1.head point to 2.head, and 2.head to 1.next
+            temp.next = itr;
+            itr.next = tempNext;
+            
+            //moving ahead in list
+            temp = tempNext;
+            itr = itrNext;
+        }
+    }
+    
+    public ListNode reverse(ListNode node) {
+        
+        ListNode prev = null;
+        ListNode curr = node;
+        
+        //pointing curr to prev
+        //then moving ahead
+        while (curr != null) {
+            ListNode nextNode = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+        
+        return prev;
+    }
+    
+    public ListNode midNode(ListNode head){
+        
+        //move fast at 2x and slow at x
+        ListNode fast = head;
+        ListNode slow = head;
+        
+        //when fast reach end, slow will reach mid
+        while(fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        
+        return slow;
+    }
+    
+}

@@ -1,0 +1,64 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public static TreeNode build(int[] ino, int isi, int iei, int[] post, int posi, int poei) {
+    	
+    	//if reached a null node
+    	if (posi > poei) {
+    		return null;
+    	}
+    	//if single root node only
+    	if (posi == poei) {
+    		return new TreeNode(post[poei]);
+    	}
+    	
+    	//last element of postorder will be always root for each tree and subtree
+    	//postorder approach -  left  right  root
+    	TreeNode root = new TreeNode(post[poei]);
+    	
+    	int j = isi;
+    	int count = 0;
+    	
+    	//finding value in inorder to get left and right tree from inorder
+    	//inorder approach - left  root  right
+    	while(ino[j] != root.val) {
+    		j++;
+    		count++;
+    	}
+    	
+    	//calling left part of tree using inorder count, as left of inorder 
+    	//root will be left subtree
+    	root.left = build(ino, isi, isi+count-1, post, posi, posi+count-1);
+    	//calling right part of tree using inorder count, as right of inorder 
+    	//root will be right subtree
+    	root.right = build(ino, isi+count+1, iei, post, posi+count, poei-1);
+    	
+    	/* Or this can be done
+    	 	finding using postorder ending index instead of start index
+    	 	
+    	root.left = build(ino, isi, isi+count-1, post, posi, poei-count-1);
+    	root.right = build(ino, isi+count+1, iei, post, poei-count, poei-1);
+    	*/
+    	return root;
+    	
+    }
+    
+    public static TreeNode buildTree(int[] inorder, int[] postorder) {
+       
+    	return build(inorder, 0, inorder.length-1, postorder, 0, postorder.length-1);
+    	
+    }
+}
