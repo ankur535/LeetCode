@@ -1,0 +1,36 @@
+class Solution {
+    public int findMaxLength(int[] nums) {
+        //Converting all Zeroes to -1
+    	for (int i = 0; i < nums.length; i++) {
+    		if (nums[i] == 0) {
+    			nums[i] = -1;
+    		}
+    	}
+    	
+    	//Simple, find longest subarray with sum 0
+    	HashMap<Integer, Integer> map = new HashMap<>();
+    	
+    	int ans = 0;
+    	int csum = 0;
+    	
+    	map.put(csum, -1);
+    	
+    	for (int i = 0; i < nums.length; i++) {
+    		
+    		//add in csum 
+    		csum += nums[i];
+    		
+    		if (map.containsKey(csum)) {
+    			
+    			//if exist in map, find length of new subarray
+    			int idx = map.get(csum);
+    			int len = i - idx;
+    			ans = Math.max(ans, len);    			
+    		} else {
+    			map.put(csum, i);
+    		}
+    	}
+    	
+    	return ans;
+    }
+}
