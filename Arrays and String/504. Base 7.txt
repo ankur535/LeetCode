@@ -1,0 +1,33 @@
+class Solution {
+    public String convertToBase7(int num) {
+            
+        if (num == 0) {
+            return "0";
+        }
+        
+        String base7 = "";
+        
+        boolean isNeg = false;
+        //if negative number, then isNeg is true
+        if (num < 0) {
+            isNeg = true;
+            num = num * -1;
+        }
+        
+        //finding base 7 for positive part
+        while (num != 0) {
+            
+            int rem = num % 7;
+            
+            num = num / 7;
+            
+            base7 = rem + base7;
+        }
+        
+        //if negative number, append - to it.
+        if (isNeg) {
+            base7 = "-" + base7;
+        }
+        return base7;
+    }
+}

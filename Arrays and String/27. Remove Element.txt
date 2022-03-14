@@ -1,0 +1,37 @@
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        
+        int i = 0;
+        int j = nums.length-1;
+        int count = 0;
+        //decrease j till nums[j] not equal to val
+        while (j >= 0 && nums[j] == val) {
+            j--;
+        }
+        
+        while (i < nums.length) {
+            
+            if (nums[i] != val) {
+                i++;
+                continue;
+            }
+            //count total number of val present
+            count++;
+            //change i and j only if i < j
+            if (i < j) {
+                nums[i] = nums[j];
+                nums[j] = Integer.MIN_VALUE;
+            } else {
+                nums[i] = Integer.MIN_VALUE; 
+            }
+            i++;
+            j--;
+            //decrease j till nums[j] not equal to val
+            while (j>= 0 && nums[j] == val) {
+                j--;
+            }
+        }
+
+        return (nums.length - count);        
+    }
+}

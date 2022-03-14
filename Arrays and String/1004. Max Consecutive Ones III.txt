@@ -1,0 +1,38 @@
+class Solution {
+    public int longestOnes(int[] nums, int k) {
+        int si = 0;
+		int ei = 0;
+		
+		int ans = 0;
+		//keeps count of Zeroes
+		int count = 0;
+		int n = nums.length;
+		
+		//loop till last of array
+		while (ei < n) {
+			
+			//if nums is 0, increase count
+			if (nums[ei] == 0) {
+				count++;
+			}
+			
+			//go further always
+			ei++;
+			
+			//if window is crossed for k
+			while (count > k) {
+				//bring back window within k
+				if (nums[si] == 0) {
+					count--;
+				}
+				si++;
+			}
+			
+			//update and everytime for each index
+			int len = ei - si;
+			ans = Math.max(ans, len);
+		}
+		
+		return ans;
+    }
+}
