@@ -1,0 +1,41 @@
+class Solution {
+    public int islandPerimeter(int[][] grid) {
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        int ans = 0;
+        
+        //direction 2D array
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        //travel over the given 2D array
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                
+                //if value is 1
+                if (grid[i][j] == 1) {
+                    int nbr = 0;
+                    for (int[] dir: dirs) {
+                        
+                        //find new position using direction
+                        int x = i + dir[0];
+                        int y = j + dir[1];
+                        
+                        //if in range and neighbour exists, increase nbr count
+                        if (x >= 0 && y >= 0 && x < n && y < m && grid[x][y] == 1) {
+                            nbr++;
+                        }
+                    }
+                    
+                    //once find all neighbour for one vertex, add its contribution to ans
+                    //contribution in perimeter = (4 - no of neighbour)
+                    ans += (4 - nbr);
+                }
+            }
+        }
+        
+        return ans;
+        
+    }
+}

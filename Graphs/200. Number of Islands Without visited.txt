@@ -1,0 +1,48 @@
+class Solution {
+    
+    public void dfs(int i, int j, char[][] grid) {
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        //make value from 1 to 0 to not visit again
+        grid[i][j] = '0';
+        
+        //direction array for 2D array
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        for (int[] dir: dirs) {
+            //find new x and y from directions
+            int x = i + dir[0];
+            int y = j + dir[1];
+            
+            //if i and j in range
+            //if value is 1, call dfs
+            if (x >= 0 && y >= 0 && x < n && y < m && grid[x][y] == '1') {
+                dfs(x, y, grid);
+            }
+        }
+    }
+    
+    public int numIslands(char[][] grid) {
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        int count = 0;
+        
+        //travel over entire 2D array
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                //if value is 1, call dfs
+                if (grid[i][j] == '1') {
+                    dfs(i, j, grid);
+                    //dfs will travel to each connected island and connect them as 1
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+}
