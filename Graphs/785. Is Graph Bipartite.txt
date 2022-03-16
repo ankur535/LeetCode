@@ -1,0 +1,66 @@
+class Solution {
+    
+    //Even Cycle or No cycle means Bipartite
+    //Odd Cycle means not bipartite
+    public boolean isEven(int[][] graph, int src, int[] vis) {
+        
+        LinkedList<Integer> que = new LinkedList<>();
+        que.addLast(src);
+        
+        //color to represent group A or group B
+        int color = 0;
+        
+        while (que.size() > 0) {
+            
+            int size = que.size();
+            
+            while (size-- > 0) {
+                
+                int top = que.removeFirst();
+                
+                if (vis[top] != -1) {
+                    //if visited color and this level color are different
+                    //means odd cycle
+                    if (vis[top] != color) {
+                        return false;
+                    }                    
+                }
+                
+                //mark visited at removal time
+                vis[top] = color;
+                
+                //fill all neighbour who are not visited
+                for (int nbr: graph[top]) {
+                    if (vis[nbr] == -1) {
+                        que.addLast(nbr);
+                    }
+                }
+            }
+            
+            //change color between 0 and 1 for green and blue to understand
+            color = (color+1)%2;
+        }
+        
+        return true;
+    }
+    
+    public boolean isBipartite(int[][] graph) {
+        
+        int vtces = graph.length;
+        
+        int[] vis = new int[vtces];
+        //fill attay with -1 for no color
+        Arrays.fill(vis, -1);
+        
+        //call for all vertex as graph is unconnected
+        for (int i = 0; i < vtces; i++) {
+            if (vis[i] == -1) {
+                if (!isEven(graph, i, vis)) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+}
