@@ -1,0 +1,60 @@
+class Solution {
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        
+        int n = grid2.length;
+        int m = grid2[0].length;
+        int count = 0;
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid2[i][j] == 1) {
+                    //store all points of an island in arraylist
+                    ArrayList<Integer> points = new ArrayList<>();
+                    dfs(grid2, i, j, points);
+                    boolean flag = true;
+                    
+                    //go to each vertex of island in grid2 and if value not 1 in grid1
+                    //means no subisland 
+                    for (int idx: points) {
+                        int row = idx/m;
+                        int col = idx%m;
+                        
+                        if (grid1[row][col] == 0) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    
+                    if (flag) {
+                        count++;
+                    }
+                }
+            }
+        }
+        
+        return count;
+    }
+    
+    public void dfs(int[][] grid2, int i, int j, ArrayList<Integer> points) {
+        
+        int n = grid2.length;
+        int m = grid2[0].length;
+        
+        //make grid2[i][j] as 0, means visited
+        //and store i and j in arraylist as 1D array
+        grid2[i][j] = 0;
+        points.add(i*m+j);
+        
+        //Normal DFS
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        for (int[] dir: dirs) {
+            int x = i + dir[0];
+            int y = j + dir[1];
+            
+            if (x >= 0 && y >= 0 && x < n && y < m && grid2[x][y] == 1) {
+                dfs(grid2, x, y, points);
+            }
+        }
+    }
+}

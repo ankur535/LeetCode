@@ -1,0 +1,45 @@
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        
+        int V = graph.length;
+        
+        int[] vis = new int[V];
+        List<Integer> ans = new ArrayList<>();
+        
+        for (int i = 0; i < V; i++) {
+            //visit all not visited vertex
+            if (vis[i] == 0) {
+                boolean cycle = dfs(i, graph, vis);
+                if (!cycle) {
+                    //if no cycle, add in ans
+                    ans.add(i);
+                }
+            } else if (vis[i] == 2) {
+                //if visited and store 2, means add in ans
+                ans.add(i);
+            }
+        }
+        
+        return ans;       
+    }
+    
+    public boolean dfs(int src, int[][] graph, int[] vis) {
+        
+        vis[src] = 1;
+        
+        //call DFS traversal for 0 and 1
+        for (int nbr: graph[src]) {
+            if (vis[nbr] == 0) {
+                boolean cycle = dfs(nbr, graph, vis);
+                if (cycle) return true;
+            } else if (vis[nbr] == 1) {
+                return true;
+            }
+        }
+        
+        //on falling from stack, put 2 for src
+        vis[src] = 2;
+        return false;       
+        
+    }
+}
