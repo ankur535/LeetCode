@@ -1,0 +1,62 @@
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        
+        //Doing it with BFS and also marking visited at removal time
+        //check other code for insertion time
+        
+        int n = mat.length;
+        int m = mat[0].length;
+        
+        LinkedList<Integer> que = new LinkedList<>();
+        
+        int[][] ans = new int[n][m];
+        
+        //fill -1 in full 2D matrix to keep track of visited
+        for (int[] e: ans) {
+            Arrays.fill(e, -1);
+        }
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 0) {
+                    //add all cells (i,j) with 0 in que as 1D array
+                    que.addLast(i*m+j);   
+                }
+            }
+        }
+        
+        int level = 0;
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        while (que.size() > 0) {
+            int size = que.size();
+            
+            while (size-- > 0) {
+                
+                int idx = que.removeFirst();
+                
+                int i = idx/m;
+                int j = idx%m;
+                
+                //if that cell already visited, don't do anything
+                //to protect where we can get same cell index twice due to removal time
+                if (ans[i][j] != -1) continue;
+                
+                ans[i][j] = level;
+                
+                for (int[] dir: dirs) {
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    
+                    if (x >= 0 && y >= 0 && x < n && y < m && ans[x][y] == -1) {
+                        que.addLast(x*m+y);
+                    }
+                }
+            }
+            
+            level++;
+        }
+        
+        return ans;
+    }
+}

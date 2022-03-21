@@ -1,0 +1,75 @@
+class Solution {
+    public int longestIncreasingPath(int[][] matrix) {
+        
+        int n = matrix.length;
+        int m = matrix[0].length;
+        
+        int[][] indegree = new int[n][m];
+        
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        for (int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                //go to each direction neighbour and increase its indegree if greater than source
+                //to store indegree for possible paths
+                for (int[] dir: dirs) {
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    
+                    if (x >= 0 && y >= 0 && x < n && y < m && matrix[x][y] > matrix[i][j]) {
+                        indegree[x][y]++;
+                    }
+                }
+            }
+        }
+        
+        LinkedList<Integer> que = new LinkedList<>();
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                //store all 2D index with indegree as 0 in queue converting to 1D index
+                if (indegree[i][j] == 0) {
+                    que.addLast(i*m+j);
+                }
+            }
+        }
+        
+        int level = 0;
+        
+        while (que.size() > 0) {
+            int size = que.size();
+            
+            while (size-- > 0) {
+                
+                int idx = que.removeFirst();
+                
+                int i = idx/m;
+                int j = idx%m;
+                
+                //go to each horizontal and vertical neighbour
+                for (int[] dir: dirs) {
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    
+                    //if in range and value is more than source, reduxe its indegree
+                    //as means we have already visited this path
+                    if (x >= 0 && y >= 0 && x < n && y < m && matrix[x][y] > matrix[i][j]) {
+                        indegree[x][y]--;
+                        
+                        //if visited path till this cell is maximum, then its indegree will become 0
+                        //so add in it queue, means we have reached till (x,y) with max path possible
+                        if (indegree[x][y] == 0) {
+                            que.addLast(x*m+y);
+                        }
+                    } 
+                }
+                
+            }
+            level++;
+        }
+        
+        //ans is level, as we have to ans max possible path size which will be same 
+        //as level to finish the queue, means to visit all nodes in indegree
+        return level;
+    }
+}
