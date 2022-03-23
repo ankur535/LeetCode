@@ -1,0 +1,62 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        
+        //create graph first
+        ArrayList<Integer>[] graph = new ArrayList[numCourses];
+        
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        //fill graph from prerequisites 
+        for (int[] edge: prerequisites) {
+            int v = edge[0];
+            int u = edge[1];
+            
+            graph[u].add(v);
+        }
+        
+        int[] vis = new int[numCourses];
+        ArrayList<Integer> ans = new ArrayList<>();
+             
+        //same as topological sort using DFS
+        //can also be done with BFS (Kahn's Algorithm - Indegree concept)
+        for (int i = 0; i < numCourses; i++) {
+            if (vis[i] == 0) {
+                boolean cycle = dfs(graph, i, vis, ans);
+                if (cycle) return new int[]{};
+            }
+        }
+        
+        int[] arr = new int[numCourses]; 
+        int j = 0;
+        
+        for (int i = numCourses-1; i >= 0; i--) {
+            arr[j] = ans.get(i);
+            j++;
+        }
+        
+        return arr;
+    }
+    
+    public boolean dfs(ArrayList<Integer>[] graph, int src, int[] vis, ArrayList<Integer> ans) {
+        
+        //simple 0 1 2 approach of topological sort cycle detection using DFS
+        vis[src] = 1;
+        
+        for (int nbr: graph[src]) {
+            if (vis[nbr] == 0) {
+                boolean cycle = dfs(graph, nbr, vis, ans);
+                if (cycle) return true;
+            } else if (vis[nbr] == 1) {
+                return true;
+            }
+        }
+        
+        //adding in reverse order from v to u
+        vis[src] = 2;
+        ans.add(src);
+        
+        return false;
+    }
+}

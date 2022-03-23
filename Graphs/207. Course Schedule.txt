@@ -1,0 +1,52 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+        //create graph first
+        ArrayList<Integer>[] graph = new ArrayList[numCourses];
+        
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        //fill graph from prerequisites 
+        for (int[] edge: prerequisites) {
+            int v = edge[0];
+            int u = edge[1];
+            
+            graph[u].add(v);
+        }
+        
+        int[] vis = new int[numCourses];
+        
+        //same as topological sort using DFS
+        //can also be done with BFS (Kahn's Algorithm - Indegree concept)
+        for (int i = 0; i < numCourses; i++) {
+            if (vis[i] == 0) {
+                boolean cycle = dfs(graph, i, vis);
+                if (cycle) return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public boolean dfs(ArrayList<Integer>[] graph, int src, int[] vis) {
+        
+        //simple 0 1 2 approach of topological sort cycle detection using DFS
+        vis[src] = 1;
+        
+        for (int nbr: graph[src]) {
+            if (vis[nbr] == 0) {
+                boolean cycle = dfs(graph, nbr, vis);
+                if (cycle) return true;
+            } else if (vis[nbr] == 1) {
+                //means cycle detection as it denotes curr path
+                return true;
+            }
+        }
+        
+        vis[src] = 2;
+        return false;
+        
+    }
+}
