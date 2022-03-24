@@ -1,0 +1,69 @@
+class Solution {
+    
+    int leader[];
+    int size[];
+    
+    //this is concept of Union Find/Disjoint Set Union (DSU)
+    //to prepare a simple graph without redundant edges
+    public int[] findRedundantConnection(int[][] edges) {
+        
+        //no of vertices will be edges.length as we have just 1 additional edge
+        //to connect n vertices, we need (n-1) edges
+        int vtces = edges.length;
+        
+        leader = new int[vtces];
+        size = new int[vtces];
+        
+        for (int i = 0; i < vtces; i++) {
+            leader[i] = i;
+            size[i] = 1;
+        }
+        
+        for (int[] edge: edges) {
+            //as vtces are from 1 to n
+            int u = edge[0]-1;
+            int v = edge[1]-1;
+            
+            int lu = findLeader(u);
+            int lv = findLeader(v);
+            
+            //we are not preparing graph here, simply updating leader and size array
+            if (lu != lv) {
+                merge(lu, lv);
+            } else {
+                return edge;
+            }
+        }
+        
+        return new int[]{};
+    }
+    
+    //find leader of that group
+    public int findLeader(int u) {
+        
+        if (leader[u] == u) {
+            return u;
+        }
+        
+        int ul = findLeader(leader[u]);
+        
+        //path compression
+        leader[u] = ul;
+        
+        return ul;
+    }
+    
+    //update leader and new size
+    public void merge (int lu, int lv) {
+        
+        if (size[lu] >= size[lv]) {
+            leader[lv] = lu;
+            size[lu] += size[lv];
+        } else {
+            leader[lu] = lv;
+            size[lv] += size[lu];
+        }
+        
+    }
+    
+}

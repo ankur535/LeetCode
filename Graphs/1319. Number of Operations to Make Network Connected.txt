@@ -1,0 +1,79 @@
+class Solution {
+    
+    //This question is also of Union Find/Disjoint Set Union
+    //to count number of seperate components using par[i] == i
+    
+    int par[];
+    int size[];
+    
+    
+    public int makeConnected(int n, int[][] connections) {
+        
+        //if edges are less than (n-1) then we can't connect n nodes
+        if (connections.length < (n-1)) {
+            return -1;
+        }
+        
+        //int components = 0;
+        
+        //count by rank, initial components
+        int components = n;
+        
+        par = new int[n];
+        size = new int[n];
+        
+        for (int i = 0; i < n; i++) {
+            par[i] = i;
+            size[i] = 1;
+        }
+        
+        for (int[] edge: connections) {
+            int u = edge[0];
+            int v = edge[1];
+            
+            int lu = findLeader(u);
+            int lv = findLeader(v);
+            
+            if (lu != lv) {
+                merge(lu, lv);
+                
+                //when we merge for count by rank, 1 component will decrease
+                //use this or below commented code
+                components--;
+            }
+        }
+        
+        /* //after work of Union Find
+        for (int i = 0; i < n; i++) {
+            int li = findLeader(i);
+            //if i and leader of i is same, means it represents 1 component
+            if (li == i) {
+                components++;
+            }
+        }
+        */
+        
+        //now to connect n components, we need (n-1) wires
+        return components - 1;
+    }
+    
+    //UnionFind findLeader method
+    public int findLeader(int u) {
+        if (par[u] == u) return u;
+        
+        return par[u] = findLeader(par[u]);
+    }
+    
+    //UnionFind merge method
+    public void merge(int lu, int lv) {
+        
+        if (size[lu] >= size[lv]) {
+            par[lv] = lu;
+            size[lu] += size[lv];
+        } else {
+            par[lu] = lv;
+            size[lv] += size[lu];
+        }
+        
+    }
+}

@@ -1,0 +1,75 @@
+class Solution {
+    
+    //This can also be solved using Union Find/Disjoint Set Union
+    
+    int par[];
+    int size[];
+    
+    public boolean equationsPossible(String[] equations) {
+        
+        par = new int[26];
+        size = new int[26];
+        
+        for (int i = 0; i < 26; i++) {
+            par[i] = i;
+            size[i] = 1;
+        }
+        
+        for (String equ: equations) {
+            
+            //as only character at 1 will be different for operator
+            if (equ.charAt(1) == '=') {
+                
+                //'==' means create a component
+                int u = equ.charAt(0) - 'a';
+                int v = equ.charAt(3) - 'a';
+                
+                int lu = findLeader(u);
+                int lv = findLeader(v);
+                
+                if (lu != lv) {
+                    merge(lu, lv);
+                }   
+            }
+        }
+        
+        for (String equ: equations) {
+            if (equ.charAt(1) == '!') {
+                
+                //if '!=' means check if they are of same or different componets
+                int u = equ.charAt(0) - 'a';
+                int v = equ.charAt(3) - 'a';
+                
+                int lu = findLeader(u);
+                int lv = findLeader(v);
+                
+                //if same components means wrong answer
+                if (lu == lv) return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    //UnionFind to find Leader
+    public int findLeader(int u) {
+        
+        if (par[u] == u) return u;
+        
+        return par[u] = findLeader(par[u]);
+    }
+    
+    //UnionFind merge method
+    public void merge(int lu, int lv) {
+        
+        if (size[lu] >= size[lv]) {
+            par[lv] = lu;
+            size[lu] += size[lv];
+        } else {
+            par[lu] = lv;
+            size[lv] += size[lu];
+        }
+        
+    }
+    
+}
