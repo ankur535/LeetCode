@@ -1,0 +1,70 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        
+        int V = times.length;
+        
+        //instead of Edge class, we are using array of size 2
+        ArrayList<int[]>[] graph = new ArrayList[n]; 
+        
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for (int e[] : times) {
+            int u = e[0]-1;
+            int v = e[1]-1;
+            int w = e[2];
+            
+            //create graph
+            graph[u].add(new int[]{v,w});
+        }
+        
+        int dijk[] = new int[n];
+        Arrays.fill(dijk, Integer.MAX_VALUE);
+        
+        //instead of Pair class also, we use int array and sort on second index which is weight
+        PriorityQueue<int[]> pq = new PriorityQueue<>((int[] a, int[] b) -> {
+            return a[1] - b[1];
+        });
+        
+        dijk[k-1] = 0;
+        pq.add(new int[]{k-1, 0});
+        
+        while (pq.size() > 0) {
+            
+            int[] top = pq.remove();
+            
+            int node = top[0];
+            int wsf = top[1];
+            
+            if (dijk[node] < wsf) continue;
+            
+            //logic of simple Dijkstra's Algorithm
+            for (int[] e: graph[node]) {
+                
+                int nbr = e[0];
+                int wt = e[1];
+                
+                if (dijk[nbr] > wsf + wt) {
+                    dijk[nbr] = wsf + wt;
+                    pq.add(new int[]{nbr, wsf + wt});
+                }
+                
+            }
+        }
+        
+        //find maximum time delay
+        int max_time = 0;
+        
+        for (int i = 0; i < n; i++) {
+            
+            if (dijk[i] == Integer.MAX_VALUE) return -1;
+            
+            max_time = Math.max(dijk[i], max_time);
+            
+        }
+    
+        return max_time;
+        
+    }
+}
