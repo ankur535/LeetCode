@@ -1,0 +1,58 @@
+class Solution {
+    public int minimumEffortPath(int[][] heights) {
+        
+        int n = heights.length;
+        int m = heights[0].length;
+        
+        int[][] dis = new int[n][m];
+        
+        for (int[] e: dis) {
+            Arrays.fill(e, Integer.MAX_VALUE);
+        }
+        
+        dis[0][0] = 0;
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>((int a[], int b[]) -> {
+            return a[2] - b[2];
+        });
+        
+        pq.add(new int[]{0,0,0});
+        
+        int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        while (pq.size() > 0) {
+            
+            int[] top = pq.remove();
+            
+            int i = top[0];
+            int j = top[1];
+            int effort_till_now = top[2];
+            
+            //if effort till now is more, skip it
+            if (dis[i][j] < effort_till_now) continue;
+            
+            for (int[] dir: dirs) {
+                int x = i + dir[0];
+                int y = j + dir[1];
+                
+                if (x >= 0 && y >= 0 && x < n && y < m) {
+                    
+                    //find current effort
+                    int curr_effort = Math.abs(heights[x][y] - heights[i][j]);
+                    
+                    //now to store in dis array, find final_effort
+                    int final_effort = Math.max(curr_effort, effort_till_now);
+                    
+                    //update if final_effort is minimum
+                    if (final_effort < dis[x][y]) {
+                        dis[x][y] = final_effort;
+                        pq.add(new int[]{x,y,final_effort});
+                    }
+                }
+            }
+        }
+        
+        //this way, when we reach last cell, whatever value it stores will become the minimum
+        return dis[n-1][m-1];
+    }
+} 
