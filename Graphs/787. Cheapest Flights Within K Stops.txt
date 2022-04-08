@@ -1,0 +1,55 @@
+class Solution {
+    //This is exactly bellman ford question
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        
+        int[] prev = new int[n];
+        
+        //fill initial prev with infinity
+        //you can also use (int)(1e8), instead of Integer.MAX_VALUE
+        Arrays.fill(prev, Integer.MAX_VALUE);
+        
+        //to reach all nodes with 0 edges
+        prev[src] = 0;
+        
+        for (int edgeCount = 1; edgeCount <= k+1; edgeCount++) {
+            
+            //current array 
+            int[] curr = new int[n];
+            //update current from prev to start
+            for (int i = 0; i < n; i++) {
+                curr[i] = prev[i];
+            }
+            
+            boolean isUpdate = false;
+            
+            //travel over each edge
+            for (int[] e: flights) {
+                
+                int u = e[0];
+                int v = e[1];
+                int w = e[2];
+                
+                //very much needed, as adding +ve value to Infinity makes it a negative value
+				//to avoid this, you can use (int)(1e8), instead of Integer.MAX_VALUE
+                if (prev[u] == Integer.MAX_VALUE) continue;
+                
+                //calculate total weight so far
+                int wsf = prev[u];
+                int total = w + wsf;
+                
+                //update current if new weight is less
+                if (total < curr[v]) {
+                    curr[v] = total;
+                    isUpdate = true;
+                }
+            }
+            if (isUpdate == false) break;
+            
+            prev = curr;
+        }
+        
+        if (prev[dst] == Integer.MAX_VALUE) return -1;
+        
+        return prev[dst];
+    }
+}

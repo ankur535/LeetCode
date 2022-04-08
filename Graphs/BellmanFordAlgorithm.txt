@@ -1,0 +1,80 @@
+package dsalevel1.advancedds.graphs;
+
+import java.util.Arrays;
+
+public class BellmanFordAlgorithm {
+	
+	public static int[] bellmanFord (int[][] edges, int src, int V) {
+		
+		int[] prev = new int[V];   
+		
+		//you can also use (int)(1e8), instead of Integer.MAX_VALUE
+		Arrays.fill(prev, Integer.MAX_VALUE);
+		
+		//to reach all nodes with 0 edges
+		prev[src] = 0;
+		
+		for (int edgeCount = 1; edgeCount <= V; edgeCount++) {
+			
+			int[] curr = new int[V];
+			
+			boolean isUpdate = false;
+			//update current from prev to start
+			for (int i = 0; i < V; i++) {
+				curr[i] = prev[i];
+			}
+			
+			for (int[] e: edges) {
+								
+				int u = e[0];
+				int v = e[1];
+				int w = e[2];
+				//very much needed, as adding +ve value to Infinity makes it a negative value
+				//to avoid this, you can use (int)(1e8), instead of Integer.MAX_VALUE
+				if (prev[u] == Integer.MAX_VALUE) continue;
+				
+				//calculate total weight so far
+				int wsf = prev[u];
+				int total = w + wsf; 
+				
+				//update current if new weight is less
+				if (total < curr[v]) {
+					isUpdate = true;
+					curr[v] = total;
+				}
+			}
+			
+			//if not updating, means get the ans break
+			if (isUpdate == false) {
+				break;
+			}
+			
+			//if still updating till last, means got stuck in negative cycle
+			if (edgeCount == V) {
+				System.out.println("Negative cycle");
+				return new int[]{};
+			}
+			
+			prev = curr;
+		}
+		
+		return prev;		
+	}
+	
+	public static void main(String[] args) {
+		
+		int V = 5;
+		int src = 0;
+		int[][] edges = new int[][] {{0,1,-1},{0,2,4},{1,2,3},{1,3,2},{1,4,2},{3,2,5},{3,1,1},{4,3,-10}};
+		
+		//Negative cycle
+		//int[][] edges = new int[][] {{0,1,-1},{0,2,4},{1,2,3},{1,3,2},{1,4,2},{3,2,5},{3,1,1},{4,3,-10}};
+		
+		int[] ans = bellmanFord(edges, src, V);
+		
+		for (int i = 0; i < ans.length; i++) {
+			System.out.println(src + " -> " + ans[i]);
+		}
+		
+	}
+}

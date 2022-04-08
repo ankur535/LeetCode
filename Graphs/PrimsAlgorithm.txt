@@ -1,0 +1,86 @@
+package dsalevel1.advancedds.graphs;
+
+import java.util.*;
+
+//Simplest algorithm, it's BFS onlu using priority queue
+public class PrimsAlgorithm {
+	
+	public static class Edge {
+		int nbr;
+		int wt;
+		
+		public Edge(int nbr, int wt) {
+			this.nbr = nbr;
+			this.wt = wt;
+		}
+	}
+	
+	public static class Pair {
+		int st;
+		int par;
+		int we;
+		
+		public Pair(int st, int par, int we) {
+			this.st = st;
+			this.par = par;
+			this.we = we;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Edge>[] prims(ArrayList<Edge>[] graph, int src) {
+		
+		int V = graph.length;
+		
+		ArrayList<Edge>[] mst = new ArrayList[V];
+		
+		for (int i = 0; i < V; i++) {
+			mst[i] = new ArrayList<>();
+		}
+		
+		boolean vis[] = new boolean[V];
+		
+		PriorityQueue<Pair> pq = new PriorityQueue<>((Pair a, Pair b) -> {
+			return a.we - b.we;
+		});
+		
+		//add initial pair, (src, parent, wt = 0)
+		pq.add(new Pair(src, -1, 0));
+		
+		while (pq.size() > 0) {
+			
+			Pair top = pq.remove();
+			
+			int st = top.st;
+			int par = top.par;
+			int we = top.we;
+			
+			if (vis[st]) continue;
+			
+			vis[st] = true;
+			
+			//if parent not -1, then add edge btw node and parent
+			if (par != -1) {
+				addEdge(st, par, we, mst);
+			}
+			
+			//add new pair in pq for neighbours
+			for (Edge e: graph[st]) {
+				int nbr = e.nbr;
+				int wt = e.wt;
+				
+				if (!vis[nbr]) {
+					pq.add(new Pair(nbr, st, wt));
+				}
+			}
+		}
+		
+		return mst;
+	}
+	
+	//addEdge btw src and parent with weight
+	public static void addEdge(int st, int par, int we, ArrayList<Edge>[] mst) {
+		mst[st].add(new Edge(par, we));
+		mst[par].add(new Edge(st, we));
+	}
+}
