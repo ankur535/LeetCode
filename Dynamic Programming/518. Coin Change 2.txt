@@ -13,12 +13,32 @@ class Solution {
 			int ans = rec_memo2(n, coins, amount, memo);
 		 */
 		
-		int ans = rec_tab2(coins, amount);
+		//int ans = rec_tab2(coins, amount);
 		
+        	int ans = rec_tab_1D(coins, amount);
+        
 		return ans;
     }
     
-    //Tabulation 2 from n to 0
+	//Tabulation using 1D array
+	public static int rec_tab_1D(int[] arr, int tar) {
+		
+		int[] dp = new int[tar + 1];
+		
+		dp[0] = 1;
+		
+		for (int coin: arr) {
+			//start from that denomination and go till target and update its 1D array
+			//based on i - coin value from dp array, result will sum of current and new values.
+			for (int i = coin; i <= tar; i++) {
+				dp[i] += dp[i - coin];
+			}	
+		}
+		
+		return dp[tar];
+	}
+    
+   	//Tabulation 2 from n to 0
 	public static int rec_tab2(int[] arr, int Tar) {
 		
 		int n = arr.length;
