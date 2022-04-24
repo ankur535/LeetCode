@@ -1,0 +1,70 @@
+class Solution {
+    public boolean validPalindrome(String s) {
+        
+        return palindrome(s);        
+    }
+    
+    public boolean palindrome(String s) {
+        
+        int i = 0;
+        int j = s.length()-1;
+        
+        int count = 1;
+        
+        while (i <= j) {
+            
+            if (s.charAt(i) != s.charAt(j)) {
+                if (count > 0) {
+                    
+                    count--;
+                    boolean pal = false;
+                    
+                    //check for i + 1 to j if palindrome or not
+                    if (i + 1 < s.length() && s.charAt(i+1) == s.charAt(j)) {
+                        pal = palin(s.substring(i + 1, j + 1));
+                    }
+                    
+                    if (pal) {
+                        return true;
+                    } 
+                    
+                    //check for i to j-1 if palindrome or not
+                    if (j - 1 >= 0 && s.charAt(i) == s.charAt(j-1)) {
+                        pal = palin(s.substring(i, j));
+                    } 
+                    
+                    if (pal) {
+                        return true;
+                    } 
+                } else {
+                    return false;
+                }
+            } else {
+                
+                i++;
+                j--;   
+            }         
+        }
+        
+        return true;
+        
+    }
+    
+    public boolean palin(String s) {
+        
+        int i = 0;
+        int j = s.length()-1;
+        
+        while (i <= j) {
+            
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            
+            i++;
+            j--;
+        }
+        
+        return true;
+    }
+}
