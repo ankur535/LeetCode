@@ -1,0 +1,31 @@
+class Solution {
+    public boolean isPalindrome(int x) {
+        
+        int num = x;
+        
+        if (x < 0) {
+            return false;
+        }
+        
+        int rev = 0;
+        int pow = 10;
+        
+        while (x != 0) {
+            
+            int y = x%10;
+            x = x/10;
+            
+            rev = rev * pow + y;
+            
+        System.out.println(x + " " + rev);
+            
+        }
+        
+        if (rev == num) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+}
