@@ -1,0 +1,37 @@
+class Solution {
+    public int distinctSubseqII(String s) {
+        
+        int n = s.length();
+        //last occurence of character
+        int[] loc = new int[26];
+        Arrays.fill(loc, -1);
+        
+        int mod = (int) 1e9+7;
+        
+        int[] dp = new int[n+1];
+        
+        //for empty string
+        dp[0] = 1;
+        
+        for (int i = 1; i <= n; i++) {
+            
+            //double the value from previous
+            dp[i] = 2 * dp[i-1];
+            
+            char c = s.charAt(i-1);
+            
+            int lastIndex = loc[c - 'a'];
+            if (lastIndex != -1) {
+                //on substraction value can go negative so carefully increasing it
+                dp[i] = (((dp[i] - dp[lastIndex-1])%mod + mod)%mod);
+            }
+            
+            //store last index and dp value
+            loc[c - 'a'] = i;
+            dp[i] = dp[i]%mod;
+        }
+        
+        //reduce 1 for empty string
+        return dp[n] - 1;
+    }
+}

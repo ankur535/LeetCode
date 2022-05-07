@@ -1,0 +1,50 @@
+class Solution {
+
+    public int distinctSubseqII(String s) {
+        
+        int n = s.length();
+        
+        int[] arr = new int[n];
+        //total sum of array
+        int sum = 0;
+        int mod = (int) 1e9+7;
+        
+        for (int i = 0; i < n; i++) {
+            
+            char c = s.charAt(i);
+            
+            int ans = 0;
+            
+            int j = i-1;
+            
+            //move till j is greater than 0
+            while (j >= 0) {
+                
+                //if same char, then take it's value and stop
+                if (s.charAt(j) == c) {
+                    ans += arr[j];
+                    break;
+                }
+                
+                ans += (int) arr[j];
+                //take mod by adding mod to skip negative numbers
+                ans = ((ans % mod) + mod)%mod;
+                j--;
+            }
+            
+            //if reached end, add 1 for that character
+            if (j == -1) {
+                ans += 1;
+            }
+            
+            ans = ans%mod;
+            
+            arr[i] = ans;
+            
+            sum += ans;
+            sum = sum % mod;
+        }
+        
+        return sum;
+    }
+}
