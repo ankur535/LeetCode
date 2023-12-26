@@ -1,0 +1,71 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        
+        Arrays.sort(nums);
+        
+        int tar = 0;
+        
+        List<List<Integer>> ans = new ArrayList<>();
+        
+        for (int fixi = 0; fixi < nums.length; ) {
+            
+            //find ans of 2 sum to use in 3 sum
+            List<List<Integer>> smallAns = twoSum(nums, fixi + 1, nums.length-1, tar - nums[fixi]);
+            
+            makeAns(ans, smallAns, nums[fixi]);
+            
+            fixi++;
+            
+            //remove duplicates from this array, to ignore duplicate value for 'a'
+            while (fixi < nums.length && nums[fixi] == nums[fixi - 1]) {
+                fixi++;
+            }
+        }
+        
+        return ans;
+    }
+    
+    //add element to ans list
+    public void makeAns(List<List<Integer>> ans, List<List<Integer>> smallAns, int ele) {
+        
+        for (List<Integer> s: smallAns) {
+            
+            s.add(ele);
+            ans.add(s);
+        }
+    }
+    
+    //Getting ans of two sum
+    public List<List<Integer>> twoSum(int[] nums, int si, int ei, int tar) {
+        
+        List<List<Integer>> ans=new ArrayList<>();
+        
+        while (si < ei) {
+            
+            int sum = nums[si] + nums[ei];
+            
+            if (sum == tar) {
+                
+                List<Integer> smallAns=new ArrayList<>();
+                smallAns.add(nums[si]);                
+                smallAns.add(nums[ei]);
+
+                ans.add(smallAns);
+                
+                si++;
+                ei--;
+                
+                //Ignore same/duplicate values
+                while (si < ei && nums[si] == nums[si-1]) si++;
+                while(si < ei && nums[ei] == nums[ei + 1]) ei--;
+                
+            }else if (sum < tar) {
+                si++;
+            } else {
+                ei--;
+            }
+        }
+        
+        return ans;
+    }
+}

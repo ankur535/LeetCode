@@ -1,0 +1,55 @@
+class Solution {
+    public int minimizedMaximum(int n, int[] quantities) {
+        
+        int si = 1;
+        int ei = 0;
+        
+        //ei can be the maximum quantity of 1 product type
+        for (int q: quantities) {
+            ei = Math.max(q, ei);
+        }
+        
+        //or take ei as (int) 1e5;
+        
+        int ans = 0;
+        
+        //Binary search technique
+        while (si <= ei) {
+            
+            int mid = (si + ei)/2;
+            
+            if (check(quantities, mid, n)) {
+                ans = mid;
+                ei = mid - 1;
+            } else {
+                si = mid + 1;
+            }
+        }
+        
+        //both ans and si point correctly
+        //return ans; 
+        return si;
+    }
+    
+    //check how many stores will be required and left
+    public boolean check(int[] quantities, int mid, int stores) {
+        
+        for (int q: quantities) {
+            
+            //find stores required for this quantity
+            int s = q/mid;
+            
+            if (q % mid != 0) {
+                s++;
+            }
+            
+            //find remaining stores
+            stores = stores - s;
+            
+            //if no stores left means not possible to distribute
+            if (stores < 0) return false;
+        }
+        
+        return stores >= 0;
+    }
+}

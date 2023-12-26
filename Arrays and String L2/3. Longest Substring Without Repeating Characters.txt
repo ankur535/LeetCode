@@ -1,0 +1,43 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        
+        int si = 0;
+        int ei = 0;
+        
+        //Correct window - [si, ei - 1]
+        
+        //as total 128 characters are there in ascii
+        int[] freq = new int[128];
+        int count = 0;
+        int ans = 0;
+        
+        while (ei < s.length()) {
+            
+            //using ascii value of character
+            if (freq[s.charAt(ei)] == 1) {
+                count++;
+            }
+            
+            freq[s.charAt(ei)]++;
+            ei++;
+            
+            while (count > 0) { //Correct the window 
+                
+                //if found that repeating char, decrease count and stop
+                if (freq[s.charAt(si)] == 2) {
+                    count--;
+                }
+                
+                freq[s.charAt(si)]--;
+                si++;
+            }
+            
+            //store maximum for ans
+            if (ans < (ei - si)) {
+                ans = ei - si;
+            }
+        }
+        
+        return ans;
+    }
+}

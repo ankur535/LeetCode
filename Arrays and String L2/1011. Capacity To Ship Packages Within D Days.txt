@@ -1,0 +1,60 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        
+        //int si = 1;
+        //int ei = (int) 1e9;
+        
+        //Or take min and max value for si and wei
+        int si = 1;
+        int ei = 0;
+        
+        for (int w: weights) {
+            si = Math.max(si, w);   //min will be 
+            ei += w;
+        }
+        
+        int ans = -1;
+        
+        //binary search on the range of possible capacities
+        while (si <= ei) {
+            
+            int mid = (si + ei)/2;
+            
+            if (check(weights, mid, days)) {
+                ans = mid;
+                ei = mid - 1;
+            } else {
+                si = mid + 1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    //check if mid satisfies the answer, very easy code 
+    public boolean check(int[] weights, int mid, int days) {
+        
+        int curr_wt = 0;
+        int total_days = 0;
+        
+        for (int w: weights) {
+            
+            //as min possible is the maximum of the weights array
+            //needed only if si = 1 and ei = (int) 1e9 is taken
+            //if (w > mid) return false;
+            
+            if (curr_wt + w > mid) {
+                total_days++;
+                curr_wt = w;
+            } else {
+                curr_wt += w;
+            }
+            
+            if (total_days > days) return false;
+        }
+        
+        if (curr_wt > 0) total_days++;
+        
+        return total_days <= days;
+    }
+}

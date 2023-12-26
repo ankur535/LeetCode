@@ -1,0 +1,44 @@
+public class Solution {
+    /**
+     * @param s: A string
+     * @param k: An integer
+     * @return: An integer
+     */
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        // write your code here
+
+        int si = 0;
+        int ei = 0;
+
+        int[] freq = new int[128];
+        int count = 0;
+        int ans = 0;
+
+        while (ei < s.length()) {
+
+            if (freq[s.charAt(ei)] == 0) {
+                count++;
+            }
+
+            freq[s.charAt(ei)]++;
+            si++;
+
+            //Similar to LeetCode 159 or LintCode 928, here use k instead of 2
+            while (count > k) {
+
+                if (freq[s.charAt(si)] == 1) {
+                    count--;
+                }
+
+                freq[s.charAt(si)]--;
+                si++;
+            }
+
+            if (ans < (ei - si)) {
+                ans = ei - si;
+            }
+        }
+
+        return ans;
+    }
+}

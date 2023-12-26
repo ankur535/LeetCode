@@ -1,0 +1,49 @@
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        
+        int si = 1;
+        int ei = (int) 1e9;
+        
+        int ans = -1;
+        
+        //binary search simply on the range of possible k
+        while (si <= ei) {
+            
+            int mid = (si + ei)/2;
+            
+            if (check(mid, piles, h)) {
+                ans = mid;
+                ei = mid - 1;
+            } else {
+                si = mid + 1;
+            }
+        }
+        
+        return ans;
+        //si will also point to correct value
+        //return si;
+    }
+    
+    //Check functions check if mid is possible ans or not
+    public boolean check(int mid, int[] piles, int h) {
+        
+        int total = 0;
+        
+        for (int p: piles) {
+            
+            //divide part
+            int time = p/mid;
+            
+            //and if value is greater than mid, then increase time by 1
+            if (p%mid != 0) {
+                time++;
+            }
+            
+            total += time;
+            
+            if (total > h) return false;
+        }
+        
+        return total <= h;
+    }
+}
