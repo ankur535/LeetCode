@@ -1,0 +1,102 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+
+        //Brute force approach - This takes time O(N) and space O(N)
+        //Creating a reverse linkedlist
+        ListNode prev = null;
+        ListNode temp = head;
+
+        while (temp != null) {
+            ListNode curr = new ListNode(temp.val, prev);
+            prev = curr;
+            temp = temp.next;
+        }
+
+        ListNode t1 = head;
+        ListNode t2 = prev;
+
+        //Traversing both main and reveresed linked list and checking palindrome
+        while (t1 != null) {
+            if (t1.val != t2.val) {
+                return false;
+            }
+
+            t1 = t1.next;
+            t2 = t2.next;
+        }
+		
+        return true;
+    }
+}
+
+
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+
+		//Better approach - This takes time O(N) and space O(1)
+        if (head == null || head.next == null) {
+            return true;
+        }
+
+        ListNode mid = findMiddle(head);
+
+        //reverse LL after mid node
+        ListNode reverseHead = reverseLL(mid.next);
+
+        //Iterate from head and reverseHead nodes to check palindrome
+        ListNode t1 = head;
+        ListNode t2 = reverseHead;
+
+        while (t2 != null) {
+            if (t1.val != t2.val) {
+                return false;
+            }
+            t1 = t1.next;
+            t2 = t2.next;
+        }
+
+        return true;
+    }
+
+    //Reverse Linkedlist
+    public ListNode reverseLL(ListNode head) {
+        ListNode curr = head;
+        ListNode prev = null;
+
+        while (curr != null) {
+            ListNode temp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = temp;
+        }
+
+        return prev;
+    }
+
+    //Find middle of linkedlist
+    //For value n -> middle n+1/2, 1-indexed
+    //For both n = 5 and n = 6, middle node will be n = 3 (3rd node);
+    public ListNode findMiddle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+}
+
+
