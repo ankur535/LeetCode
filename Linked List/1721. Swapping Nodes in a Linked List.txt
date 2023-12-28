@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapNodes(ListNode head, int k) {
+
+        if (head == null || k <= 0) {
+            return head;
+        }
+
+        //Taking dummy node and setting slow and fast pointer to it
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode slow = dummy;
+        ListNode fast = dummy;
+
+        //moving fast pointer k times ahead, this will become the left node of exchange
+        for (int i = 1; i <= k; i++) {
+            fast = fast.next;
+            if (fast == null) return head;
+        }
+
+        //keeping left node of exchange as temp
+        ListNode temp = fast;
+
+        //Moving fast to null to get right node of exchange in slow pointer
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        //Exhange value of left and right node
+        int val = temp.val;
+        temp.val = slow.val;
+        slow.val = val;
+
+        return head;
+    }
+}
