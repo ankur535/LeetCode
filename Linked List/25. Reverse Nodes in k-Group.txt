@@ -1,0 +1,73 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+
+        // Initialize pointers for traversal and tracking reversed nodes
+        ListNode curr = head;   // Current pointer for traversal
+        ListNode prev = null;   // Previous pointer for reversing nodes
+        ListNode rvprev = null; // Pointer to the last node of the previous reversed group
+        ListNode rv = head;     // Pointer to the first node of the current reversed group
+
+        // Traverse the list in groups of k nodes
+        while (curr != null) {
+
+            // Check if there are at least k nodes remaining
+            ListNode tmp = curr;
+
+            int i = 1;
+            while (i < k) {
+                if (tmp.next == null) {
+                    break;
+                }
+                tmp = tmp.next;
+                i++;
+            }
+
+            // If less than k nodes remaining, break the loop
+            if (i < k)
+                break;
+
+            // Reverse the k nodes
+            int j = 1;
+            prev = null;
+            while (j <= k) {
+                ListNode next = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = next;
+                j++;
+            }
+
+            // Connect the reversed group to the previous part of the list
+            if (rvprev == null) {
+                // If rvprev is null, it's the first time reversed, so set head to prev
+                // and update rvprev to point to the start of the reversed nodes
+                head = prev;
+                rvprev = rv;
+            } else {
+                // rvprev.next point to prev, which was pointing to the start of current reversed nodes
+                // Ex: On second iteration after reversing the nodes, it will look like below
+
+                // 3->2->1(rvprev) 4(rv)<-5<-6(prev) -> 7(curr)->8->9->10->11
+                // So, final it will be 3->2->1(rvprev) -> 6(prev)->5->4(rv) -> 7(curr)->8->9->10->11
+                rvprev.next = prev;
+                rvprev = rv;
+            }
+
+            // Connect the end of the reversed group to the remaining nodes
+            rv.next = curr;
+            rv = curr;
+        }
+
+        return head;
+    }
+}
