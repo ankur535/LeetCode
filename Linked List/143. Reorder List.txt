@@ -76,3 +76,46 @@ class Solution {
     }
     
 }
+
+
+//Below Solution with Recursion, faster and efficient
+
+class Solution {
+
+    ListNode rv = null;
+
+    public void reorderList(ListNode head) {
+        
+        //Reorder List Using recursion
+        rv = head;
+        ListNode mid = mid(head);
+        reorderHelper(mid.next);
+        //rv will become tail
+        rv.next = null;
+    }
+
+    public void reorderHelper(ListNode curr) {
+
+        if (curr == null) return;
+        reorderHelper(curr.next);
+
+        //After coming out of recursion, each time set rv and curr nodes to connect
+        ListNode tmp = rv.next;
+        rv.next = curr;
+        curr.next = tmp;
+        rv = tmp;
+    }
+
+    public ListNode mid(ListNode head) {
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        return slow;
+    }
+}
