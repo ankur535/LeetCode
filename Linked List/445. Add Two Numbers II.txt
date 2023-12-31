@@ -1,0 +1,75 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+
+    int carry = 0;
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        
+        ListNode t1 = l1;
+        ListNode t2 = l2;
+        int size1 = 0;
+        int size2 = 0;
+
+        while (t1 != null) {
+            size1++;
+            t1 = t1.next;
+        }
+
+        while (t2 != null) {
+            size2++;
+            t2 = t2.next;
+        }
+
+        //Using recursion to keep trace while coming back
+        ListNode head = addHelper(l1, l2, size1, size2);
+
+        //handling extra carry value
+        if (carry != 0) {
+            ListNode newHead = new ListNode(carry);
+            newHead.next = head;
+            head = newHead;
+        }
+
+        return head;
+    }
+
+    public ListNode addHelper(ListNode l1, ListNode l2, int size1, int size2) {
+
+        if (l1 == null || l2 == null) {
+            return null;
+        }
+
+        ListNode ans = null;
+        int sum = 0;
+
+        //Using recursion based on size to handle size difference
+        if (size1 > size2) {
+            ans = addHelper(l1.next, l2, size1-1, size2);
+            sum = l1.val + carry;
+        } else if (size2 > size1) {
+            ans = addHelper(l1, l2.next, size1, size2-1);
+            sum = l2.val + carry;
+        } else {
+            ans = addHelper(l1.next, l2.next, size1-1, size2-1);
+            sum = l1.val + l2.val + carry;
+        }
+
+        int rem = sum % 10;
+        carry = sum / 10;
+
+        ListNode nn = new ListNode();
+        nn.val = rem;
+        nn.next = ans;
+
+        return nn;
+    }
+}
