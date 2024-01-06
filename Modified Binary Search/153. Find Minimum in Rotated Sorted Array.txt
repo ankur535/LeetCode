@@ -1,0 +1,25 @@
+class Solution {
+    public int findMin(int[] nums) {
+
+        // Using modified Binary search
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left < right) {
+
+            int mid = left + (right - left) / 2;
+
+            // if middle element is greater than right, that means pivot is in right
+            // and minimum element will be in right
+            //else minimum will be left side
+            
+            if (nums[mid] > nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        return nums[left];
+    }
+}
