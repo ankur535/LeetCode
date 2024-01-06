@@ -1,0 +1,34 @@
+class Solution {
+    public int search(int[] nums, int target) {
+        
+        int si = 0;
+        int ei = nums.length-1;
+        
+        while (si <= ei) {
+            
+            int mid = (si + ei)/2;
+            
+            if (nums[mid] == target) return mid;
+            
+            if (nums[si] <= nums[mid]) {    //region from si to mid is sorted
+                
+                //if target in sorted region then move ei, else move si
+                if (nums[si] <= target && target < nums[mid]) {
+                    ei = mid - 1;
+                } else {
+                    si = mid + 1;
+                }
+            } else {    // means other part is sorted if 1st not sorted
+                
+                //if target is between mid and ei, move si else move si
+                if (nums[mid] < target && target <= nums[ei]) {
+                    si = mid + 1;
+                } else {
+                    ei = mid-1;
+                }
+            }
+        }
+        
+        return -1;
+    }
+}

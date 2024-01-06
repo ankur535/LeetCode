@@ -1,0 +1,28 @@
+class Solution {
+
+	public static int findMin(int[] nums) {
+        
+		int max = Integer.MIN_VALUE;
+		int left = 0;
+		int right = nums.length-1;
+		
+		while (left < right) {
+			
+			int mid = left + (right-left)/2;
+			
+			//if searching right, left = mid and reduce right by 1
+			if (nums[mid] > nums[right]) {
+				left = mid;
+				right--;
+			} else {
+				//if searching left keep a max value and search left
+				max = Math.max(max, nums[right]);
+				right = mid-1;
+			}
+		}
+		
+		max = Math.max(max, nums[left]);
+		return max;
+		
+    }
+}
