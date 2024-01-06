@@ -1,0 +1,47 @@
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        
+        int fi = -1;
+        int li = -1;
+        
+        int si = 0;
+        int ei = nums.length-1;
+        
+        //finding first index using binary search
+        while (si <= ei) {
+            
+            int mid = (si + ei)/2;
+            
+            if (nums[mid] == target) {
+                fi = mid;
+            }
+            
+            if (nums[mid] < target) {
+                si = mid + 1;
+            } else {
+                ei = mid - 1;
+            }
+        }
+        
+        si = 0;
+        ei = nums.length-1;
+        
+        //finding last index using binary search
+        while (si <= ei) {
+            
+            int mid = (si + ei)/2;
+            
+            if (nums[mid] == target) {
+                li = mid;
+            }
+            
+            if (nums[mid] > target) {
+                ei = mid - 1;
+            } else {
+                si = mid + 1;
+            }
+        }
+        
+        return new int[]{fi, li};        
+    }
+}
