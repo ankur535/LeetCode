@@ -1,0 +1,77 @@
+class Solution {
+    public int climbStairs(int n) {
+        
+        //int ans = rec(n);
+
+        //int memo[] = new int[n + 1];
+        //int ans = rec_memo(n, memo);
+
+        //int ans = rec_tab(n);
+        int ans = tab_better(n);
+
+        return ans;
+    }
+
+    private int tab_better(int n) {
+        
+        int a = 1;
+        int b = 1;
+
+        if (n == 0) return a;
+
+        for (int i = 2; i <= n; i++) {
+            int ans = a + b;
+            a = b;
+            b = ans;
+        }
+
+        return b;
+    }
+
+    private int rec_tab(int n) {
+        
+        int[] dp = new int[n+1];
+        dp[0] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            int ans = dp[i-1];
+
+            if (i-2 >= 0) {
+                ans += dp[i-2];
+            }
+
+            dp[i] = ans;
+        }
+
+        return dp[n];
+    }
+
+    private int rec_memo(int n, int[] memo) {
+
+        if (n == 0) return memo[n] = 1;
+
+        if (memo[n] != 0) return memo[n];
+
+        int ans = rec(n-1);
+
+        if (n-2 >= 0) {
+            ans += rec(n-2);
+        }
+
+        return memo[n] = ans;
+
+    }
+
+    private int rec(int n) {
+
+        if (n == 0) return 1;
+
+        int ans = rec(n-1);
+
+        if (n-2 >= 0) {
+            ans += rec(n-2);
+        }
+
+        return ans;
+    }
+}
