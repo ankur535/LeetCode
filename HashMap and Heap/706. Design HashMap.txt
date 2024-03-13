@@ -1,0 +1,105 @@
+class MyHashMap {
+
+    static class Node {
+        int key;
+        int value;
+
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    LinkedList<Node>[] buckets;
+    int size;
+
+    public MyHashMap() {
+        buckets = new LinkedList[4];
+        for (int i = 0; i < buckets.length; i++) {
+            buckets[i] = new LinkedList<>();
+        }
+        size = 0;
+    }
+
+    private int getBucket(Integer key) {
+        int hashCode = (int) key.hashCode();
+        return Math.abs(hashCode) % buckets.length;
+    }
+
+    private int getNodeIndes(int bi, int key) {
+
+        LinkedList<Node> bucket = buckets[bi];
+        for (int i = 0; i < bucket.size(); i++) {
+            if (bucket.get(i).key == key) {
+                return i;
+            }
+        }
+
+        return -1;
+
+    }
+
+    public void reHash() {
+
+        LinkedList<Node>[] oldbuckets = buckets;
+        buckets = new LinkedList[oldbuckets.length * 2];
+        for (int i = 0; i < buckets.length; i++) {
+            buckets[i] = new LinkedList<>();
+        }
+        
+        for (int bi = 0; bi < oldbuckets.length; bi++) {
+            for (int di = 0; di < oldbuckets[bi].size(); di++) {
+                Node nn = oldbuckets[bi].get(di);
+                put(nn.key, nn.value);
+            }
+        }
+    }
+    
+    public void put(int key, int value) {
+        
+        int bi = getBucket(key);
+        int di = getNodeIndes(bi, key);
+
+        if (di == -1) {
+            Node nn = new Node(key, value);
+            buckets[bi].add(nn);
+            size++;
+        } else {
+            buckets[bi].get(di).value = value;
+        }
+
+        //Threshold Adoption
+        if (size / buckets.length > 2) {
+            reHash();
+        }
+
+    }
+    
+    public int get(int key) {
+        int bi = getBucket(key);
+        int di = getNodeIndes(bi, key);
+
+        if (di == -1) {
+            return -1;
+        }
+
+        return buckets[bi].get(di).value;
+    }
+    
+    public void remove(int key) {
+        int bi = getBucket(key);
+        int di = getNodeIndes(bi, key);
+
+        if (di != -1) {
+            buckets[bi].remove(di);
+        }
+    }
+}
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap obj = new MyHashMap();
+ * obj.put(key,value);
+ * int param_2 = obj.get(key);
+ * obj.remove(key);
+ */
