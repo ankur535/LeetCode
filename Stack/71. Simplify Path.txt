@@ -1,0 +1,31 @@
+class Solution {
+    public String simplifyPath(String path) {
+        
+        String[] components = path.split("/");
+
+        Stack<String> st = new Stack<>();
+
+        for (String str: components) {
+
+            if (str.equals("..")) {
+                if (st.size() > 0) {
+                    st.pop();
+                }
+            } else if (str.equals(".") || str.equals("")) {
+                //Do nothing
+            } else {
+                st.push(str);
+            }
+        }  
+
+        String canonicalPath = "";
+
+        while (st.size() > 0) {
+            String dir = st.pop();
+            canonicalPath = "/" + dir + canonicalPath;
+        } 
+
+        return canonicalPath.length() > 0 ? canonicalPath : "/" ;
+
+    }
+}
