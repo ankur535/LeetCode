@@ -1,0 +1,48 @@
+class MyStack {
+
+    LinkedList<Integer> que;
+    LinkedList<Integer> helperQue;
+
+    public MyStack() {
+        que = new LinkedList<>();
+        helperQue = new LinkedList<>();
+    }
+    
+    public void push(int x) {
+        if (que.size() == 0) {
+            que.addLast(x);
+        } else {
+
+            while (que.size() > 0) {
+                helperQue.addLast(que.removeFirst());
+            }
+
+            que.addLast(x);
+
+            while (helperQue.size() > 0) {
+                que.addLast(helperQue.removeFirst());
+            }
+        }
+    }
+    
+    public int pop() {
+        return que.removeFirst(); 
+    }
+    
+    public int top() {
+        return que.getFirst();
+    }
+    
+    public boolean empty() {
+        return que.size() == 0 ? true : false;
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
