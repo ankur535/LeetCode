@@ -1,0 +1,65 @@
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        
+        ArrayDeque<Integer> que = new ArrayDeque<>();
+        for (int st: students) {
+            que.add(st);
+        }
+
+        //we iterate for each sandwich
+        for (int j = 0; j < sandwiches.length; j++) {
+
+            //then we check if any remaining student want that sandwich
+            int count = que.size();
+            while (count > 0) {
+                int st = que.remove();
+
+                if (sandwiches[j] == st) {
+                    break;
+                }
+
+                //if sandwich not want by student, we add it back to que and reduce count
+                que.add(st);
+                count--;
+            }
+
+            //if count is 0, means no student want that sandwich
+            if (count == 0) {
+                break;
+            }
+        }
+
+        //que size represent no of students unable to eat lunch
+        return que.size();
+    }
+}
+
+
+//Another solution
+
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        
+        ArrayDeque<Integer> que = new ArrayDeque<>();
+        int[] count = new int[2]; // Count of students preferring each type of sandwich
+
+        for (int student : students) {
+            que.add(student);
+            count[student]++;
+        }
+
+        int i = 0;
+        while (!que.isEmpty() && count[sandwiches[i]] > 0) {
+            if (que.peek() == sandwiches[i]) {
+                count[sandwiches[i]]--;
+                que.remove();
+                i++;
+            } else {
+                que.add(que.remove());
+            }
+        }
+
+        //que size represent no of students unable to eat lunch
+        return que.size();
+    }
+}
