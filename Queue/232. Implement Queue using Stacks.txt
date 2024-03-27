@@ -1,0 +1,84 @@
+class MyQueue {
+
+    Stack<Integer> stack;
+    Stack<Integer> helperStack;
+    
+    public MyQueue() {
+        stack = new Stack<>();
+        helperStack = new Stack<>();
+    }
+    
+    public void push(int x) {
+        
+        while (stack.size() > 0) {
+            helperStack.push(stack.pop());
+        }
+
+        stack.push(x);
+
+        while (helperStack.size() > 0) {
+            stack.push(helperStack.pop());
+        }
+    }
+    
+    public int pop() {
+        return stack.pop();
+    }
+    
+    public int peek() {
+        return stack.peek();
+    }
+    
+    public boolean empty() {
+        return stack.isEmpty();
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+ 
+ 
+//Approach 2 - Amortized O(1) Time Complexity
+
+class MyQueue {
+
+    Stack<Integer> inputStack;
+    Stack<Integer> outputStack;
+    
+    public MyQueue() {
+        inputStack = new Stack<>();
+        outputStack = new Stack<>();
+    }
+    
+    public void push(int x) {
+        inputStack.push(x);
+    }
+    
+    public int pop() {
+        if (outputStack.isEmpty()) {
+            while (!inputStack.isEmpty()) {
+                outputStack.push(inputStack.pop());
+            }
+        }
+        return outputStack.pop();
+    }
+    
+    public int peek() {
+        if (outputStack.isEmpty()) {
+            while (!inputStack.isEmpty()) {
+                outputStack.push(inputStack.pop());
+            }
+        }
+        return outputStack.peek();
+    }
+    
+    public boolean empty() {
+        return (inputStack.isEmpty() && outputStack.isEmpty());
+    }
+}

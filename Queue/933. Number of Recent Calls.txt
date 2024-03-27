@@ -1,0 +1,31 @@
+class RecentCounter {
+
+    ArrayDeque<Integer> que;
+
+    public RecentCounter() {
+        que = new ArrayDeque<>();
+    }
+    
+    public int ping(int t) {
+        que.add(t);
+        int range = t - 3000;
+        while (que.peek() < range) {
+            que.pop();
+        }
+        return que.size();
+    }
+}
+
+/*
+Solution Explanation:
+- We use a queue (LinkedList in Java) to store the timestamps of the pings.
+- When a new ping comes in (ping(int t)), we add it to the queue.
+- Then we remove all pings from the front of the queue that are older than t - 3000 milliseconds.
+- Finally, we return the size of the queue, which represents the number of recent pings.
+*/
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * RecentCounter obj = new RecentCounter();
+ * int param_1 = obj.ping(t);
+ */
