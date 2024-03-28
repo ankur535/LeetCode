@@ -1,0 +1,55 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        
+        int[] requirement = new int[128];
+        
+        int need = 0;
+        
+        //fill requirement array using t string
+        for (int i = 0; i < t.length(); i++) {
+            requirement[t.charAt(i)]++;
+            need++;
+        }
+        
+        int si = 0;
+        int ei = 0;
+        
+        int gsi = 0;
+        int gei = 0;
+        
+        int min_len = (int)1e9;
+        
+        while (ei < s.length()) {
+            
+            //decrease need if found a character from 't'
+            if (requirement[s.charAt(ei)] > 0) {
+                need--;
+            }
+            
+            requirement[s.charAt(ei)]--;
+            ei++;
+            
+            //until need is not 0
+            while (need == 0) {
+                
+                //if new length is less, and also need is 0
+                if (min_len > (ei - si)) {
+                    
+                    min_len = ei - si;
+                    gsi = si;
+                    gei = ei;                    
+                }
+                
+                //if get a character from 't'
+                if (requirement[s.charAt(si)] == 0) {
+                    need++;
+                }
+                
+                requirement[s.charAt(si)]++;
+                si++;
+            }
+        }
+        
+        return min_len == (int)1e9 ? "" : s.substring(gsi, gei);
+    }
+}

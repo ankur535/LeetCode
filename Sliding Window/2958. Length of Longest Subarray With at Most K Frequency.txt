@@ -1,0 +1,32 @@
+class Solution {
+    public int maxSubarrayLength(int[] nums, int k) {
+        
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        int len = 0;
+        int left = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+
+            int rightVal = nums[right]; 
+
+            if (hm.getOrDefault(rightVal, 0) < k) {
+                //insert key until frequency less than k
+                hm.put(rightVal, hm.getOrDefault(rightVal, 0) + 1);
+            } else {
+
+                //move left forward till we get rightval to avoid freq more than k
+                int leftVal = nums[left];
+                while (leftVal != rightVal) {
+                    hm.put(leftVal, hm.get(leftVal) - 1);
+                    left++;
+                    leftVal = nums[left];
+                }
+                left++;
+            }
+
+            len = Math.max(len, right - left + 1);
+        }
+
+        return len;
+    }
+}
