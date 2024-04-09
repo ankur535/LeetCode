@@ -1,0 +1,25 @@
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        
+        int si = 0;
+        int ei = numbers.length-1;
+        
+        //simply using two pointers
+        
+        while (si < ei) {
+            
+            int sum = numbers[si] + numbers[ei];
+            
+            if (sum < target) {
+                si++;
+            } else if (sum > target) {
+                ei--;
+            } else {
+                //for 1-based indexing
+                return new int[]{si + 1, ei + 1};
+            }
+        }
+        
+        return new int[]{};        
+    }
+}
