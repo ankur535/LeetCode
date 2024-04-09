@@ -1,0 +1,53 @@
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        
+        //keeping 2 pointers i and j
+        int i = 0, j = 0;
+        while (i < s.length() && j < t.length()) {
+            if (s.charAt(i) == t.charAt(j)) {
+                i++;
+            }
+            j++;
+        }
+        return i == s.length();
+    }
+}
+
+
+//Very slow but different approach
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        
+        //Storing indexes in a map
+        Map<Character, List<Integer>> hm = new HashMap<>();
+        for (int i = 0; i < t.length(); i++) {
+            hm.computeIfAbsent(t.charAt(i), k -> new ArrayList<>()).add(i);
+        }
+
+        //Now tracing pointer, if pointers fails to update, 
+        //means that char is not present further in remaining t string from pointer to end.
+        int pointer = -1;
+        for (int i = 0; i < s.length(); i++) {
+            int tempPointer = pointer;
+            char ch = s.charAt(i);
+            if (!hm.containsKey(ch)) {
+                return false;
+            }
+
+            for (Integer index: hm.get(ch)) {
+                if (index > pointer) {
+                    pointer = index;
+                    break;
+                }
+            }
+            if (tempPointer == pointer) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
