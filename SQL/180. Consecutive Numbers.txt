@@ -1,0 +1,39 @@
+# Write your MySQL query statement below
+
+#Create a table with next and next2next value
+#Ids are missing in testcases so adding addition check of ids
+WITH cte AS
+(SELECT *, LEAD(num, 1) OVER() AS num_1, LEAD(num, 2) OVER() AS num_2, LEAD(id, 1) OVER() AS id_1, LEAD(id, 2) OVER() AS id_2
+FROM logs
+ORDER BY id)
+
+#From that table, find distinct num with all 3 consecutive values being equal
+SELECT DISTINCT num AS ConsecutiveNums
+FROM cte
+WHERE num = num_1
+AND num = num_2
+AND id_1 = id + 1
+AND id_2 = id + 2
+
+
+
+
+Solution 2 using join
+
+# Write your MySQL query statement below
+
+#This code will join columns only if ids are also incremental
+#and then compare num in where clause
+select 
+    distinct logs1.num as ConsecutiveNums 
+from 
+    logs logs1 join logs logs2 join logs logs3
+on 
+    logs1.id = logs2.id - 1
+    and
+    logs2.id = logs3.id - 1
+where 
+    logs1.num = logs2.num 
+    and 
+    logs2.num = logs3.num;
+
